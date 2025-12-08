@@ -17,9 +17,9 @@ export const AuthProvider = ({ children }) => {
     const [googleLoading, setGoogleLoading] = useState(false);
 
     const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-        // iosClientId: 'YOUR_IOS_CLIENT_ID',
-        // androidClientId: 'YOUR_ANDROID_CLIENT_ID',
-        clientId: '1017822674568-2445sc99brlilo0hjo5tbtnp94okkrbb.apps.googleusercontent.com',
+        // iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+        // androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+        clientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
     });
 
     useEffect(() => {
