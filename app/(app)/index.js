@@ -166,6 +166,8 @@ export default function Home() {
                     headerRight: () => <UserAvatar />,
                     headerStyle: { backgroundColor: '#fff' },
                     headerTitleStyle: { fontWeight: 'bold' },
+                    headerRightContainerStyle: { paddingRight: 16 },
+                    headerLeftContainerStyle: { paddingLeft: 16 },
                 }}
             />
             <StatusBar style="dark" />
