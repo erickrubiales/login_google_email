@@ -1,50 +1,122 @@
-# Welcome to your Expo app 👋
+# React Native Firebase Auth Template
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Template para apps React Native com autenticação Firebase (Email/Senha + Google).
 
-## Get started
+## 🚀 Como usar este template
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### 1. Clonar e Instalar
 ```bash
-npm run reset-project
+git clone https://github.com/seu-usuario/login_google_email.git meu-novo-projeto
+cd meu-novo-projeto
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Configurar Firebase
 
-## Learn more
+1. Acesse [Firebase Console](https://console.firebase.google.com)
+2. Crie um novo projeto ou selecione um existente
+3. Vá em **Configurações do Projeto** → **Geral** → **Seus apps**
+4. Adicione um app Web (`</>`)
+5. Copie as configurações
 
-To learn more about developing your project with Expo, look at the following resources:
+### 3. Configurar Google OAuth
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Acesse [Google Cloud Console](https://console.cloud.google.com)
+2. Selecione o projeto do Firebase
+3. Vá em **APIs e Serviços** → **Credenciais**
+4. Crie um **ID do cliente OAuth 2.0** (tipo: Aplicativo da Web)
+5. Adicione as URIs de redirecionamento autorizadas:
+   - `https://auth.expo.io/@seu-usuario/seu-app`
+   - `http://localhost:8081`
 
-## Join the community
+### 4. Criar arquivo `.env`
 
-Join our community of developers creating universal apps.
+Crie o arquivo `.env` na raiz do projeto:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```env
+# Firebase Configuration
+EXPO_PUBLIC_FIREBASE_API_KEY=sua-api-key
+EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=seu-projeto.firebaseapp.com
+EXPO_PUBLIC_FIREBASE_PROJECT_ID=seu-projeto-id
+EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=seu-projeto.appspot.com
+EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=123456789
+EXPO_PUBLIC_FIREBASE_APP_ID=1:123456789:web:abc123
+
+# Google OAuth
+EXPO_PUBLIC_GOOGLE_CLIENT_ID=seu-client-id.apps.googleusercontent.com
+```
+
+### 5. Configurar Firestore
+
+1. No Firebase Console, vá em **Firestore Database**
+2. Crie um banco de dados (modo produção ou teste)
+3. Configure as regras de segurança:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /items/{itemId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null;
+    }
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+```
+
+### 6. Atualizar `app.json`
+
+Altere os seguintes campos:
+
+```json
+{
+  "expo": {
+    "name": "Nome do Seu App",
+    "slug": "nome-do-seu-app",
+    "scheme": "nomedoseuapp",
+    "ios": {
+      "bundleIdentifier": "com.seuusuario.nomedoapp"
+    },
+    "android": {
+      "package": "com.seuusuario.nomedoapp"
+    }
+  }
+}
+```
+
+## 📁 Arquivos que precisam de alteração
+
+| Arquivo | O que alterar |
+|---------|---------------|
+| `.env` | Todas as variáveis de ambiente |
+| `app.json` | `name`, `slug`, `scheme`, `bundleIdentifier`, `package` |
+| `package.json` | `name` (opcional) |
+
+## 🔑 Onde encontrar cada valor
+
+| Variável | Onde encontrar |
+|----------|----------------|
+| `FIREBASE_API_KEY` | Firebase Console → Configurações → Geral → Seus apps |
+| `FIREBASE_AUTH_DOMAIN` | Mesmo local acima |
+| `FIREBASE_PROJECT_ID` | Mesmo local acima |
+| `GOOGLE_CLIENT_ID` | Google Cloud Console → Credenciais → OAuth 2.0 |
+
+## 🏃 Executar
+
+```bash
+npx expo start -c
+```
+
+## 📱 Funcionalidades incluídas
+
+- ✅ Login com Email/Senha
+- ✅ Login com Google
+- ✅ Cadastro com validação
+- ✅ Máscara de telefone
+- ✅ Persistência de sessão
+- ✅ Perfil do usuário
+- ✅ CRUD com Firestore
+- ✅ Proteção de rotas
