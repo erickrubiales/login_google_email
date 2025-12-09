@@ -4,7 +4,7 @@ Template para apps React Native com autenticação Firebase (Email/Senha + Googl
 
 ## 🚀 Como usar este template
 
-### 1. Clonar e Instalar
+### 1. Clonar e Instalar  
 ```bash
 git clone https://github.com/seu-usuario/login_google_email.git meu-novo-projeto
 cd meu-novo-projeto
